@@ -2,7 +2,8 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"io/ioutil"
+	"net/http"
 	"strconv"
 
 	"github.com/chriscrawford1/trivia_app/helpers"
@@ -11,9 +12,9 @@ import (
 var baseURL string = "https://opentdb.com/api.php?"
 
 type question struct {
-	category      string
-	difficulty    string
-	correctAnswer string
+	category      string `json:"category"`
+	difficulty    string `json:"difficulty"`
+	correctAnswer string `json:"correct_answer"`
 }
 
 func main() {
@@ -26,5 +27,11 @@ func main() {
 	params["difficulty"] = *difficulty
 
 	query := helpers.BuildQuery(baseURL, params)
-	fmt.Printf("Query is %s", query)
+	sendQuery(query)
+}
+
+func sendQuery(query string) {
+	res, _ := http.Get(query)
+	data, _ := ioutil.ReadAll(res.Body)
+	_ = data
 }
