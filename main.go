@@ -4,12 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"strconv"
+
+	"github.com/chriscrawford1/trivia_app/helpers"
 )
 
 var baseURL string = "https://opentdb.com/api.php?"
-
-//	"github.com/chriscrawford1/trivia_app/helpers"
-// // https://opentdb.com/api.php?amount=10&difficulty=easy
 
 type question struct {
 	category      string
@@ -23,17 +22,9 @@ func main() {
 	flag.Parse()
 
 	params := make(map[string]string)
-	params["questionAmount"] = strconv.Itoa(*questionAmount)
+	params["amount"] = strconv.Itoa(*questionAmount)
 	params["difficulty"] = *difficulty
 
-	buildQuery(params)
-}
-
-func buildQuery(params map[string]string) {
-	var count int
-	for i, line := range params {
-		count++
-
-		fmt.Printf("Index [%s] contains [%s]\n", i, line)
-	}
+	query := helpers.BuildQuery(baseURL, params)
+	fmt.Printf("Query is %s", query)
 }
